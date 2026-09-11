@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moses Mwangi — Design Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ============================================
+     1. DESIGN TOKENS
+     Define your palette, type, and spacing ONCE
+     as variables. Change a value here and it
+     updates everywhere — this is the core habit
+     of modern CSS.
+  ============================================ */
+  :root {
+    /* Color */
+    --bg: #15141a;
+    --bg-raised: #1c1b23;
+    --text: #eae6e1;
+    --text-muted: #9c97a8;
+    --accent: #c9a869;
+    --border: #2b2a34;
+
+    /* Type */
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing scale — everything is a multiple of 8px.
+       This is why professional layouts feel "aligned"
+       even when you can't say exactly why. */
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 1.5rem;
+    --space-4: 2rem;
+    --space-5: 3rem;
+    --space-6: 5rem;
+    --space-7: 8rem;
+
+    --max-width: 1100px;
+  }
+
+  /* ============================================
+     2. RESET
+     Browsers apply inconsistent default styles.
+     This neutralizes them so you start from zero.
+  ============================================ */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* Respect users who've asked their OS to reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  /* Visible keyboard focus — accessibility basics */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  /* ============================================
+     3. LAYOUT UTILITIES
+     A reusable "container" keeps content from
+     stretching edge-to-edge on wide screens.
+  ============================================ */
+  .container {
+    max-width: var(--max-width);
+    margin-inline: auto;
+    padding-inline: var(--space-4);
+  }
+
+  section { padding-block: var(--space-6); }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.15;
+  }
+
+  /* ============================================
+     4. NAV
+  ============================================ */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(21, 20, 26, 0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: var(--space-3);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--space-4);
+    list-style: none;
+    font-size: 0.9rem;
+  }
+
+  .nav-links a { color: var(--text-muted); transition: color 0.2s ease; }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ============================================
+     5. HERO
+     The first thing a visitor sees. Big, confident
+     type does the work — no stock imagery needed.
+  ============================================ */
+  .hero {
+    padding-block: var(--space-7) var(--space-6);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    max-width: 14ch;
+  }
+
+  .hero .accent-word { color: var(--accent); font-style: italic; }
+
+  .hero p {
+    color: var(--text-muted);
+    font-size: 1.15rem;
+    max-width: 50ch;
+    margin-top: var(--space-3);
+  }
+
+  .hero .cta-row {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+    align-items: center;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 1.6rem;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 3px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  .btn:hover { transform: translateY(-2px); background: #d9b877; }
+
+  .btn-ghost {
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+  }
+
+  /* ============================================
+     6. ABOUT
+     Two-column on desktop, stacks on mobile —
+     this is "responsive design" in practice.
+  ============================================ */
+  .about {
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: var(--space-5);
+  }
+
+  .about h2 { font-size: 1.8rem; }
+
+  .about-body p { color: var(--text-muted); margin-top: var(--space-2); }
+  .about-body p:first-child { margin-top: 0; }
+
+  .about-body strong { color: var(--text); font-weight: 500; }
+
+  /* ============================================
+     7. PORTFOLIO / PROJECTS
+     Deliberately asymmetric grid instead of
+     identical cards — gives visual hierarchy.
+  ============================================ */
+  .portfolio { border-top: 1px solid var(--border); }
+
+  .portfolio > .container > h2 { font-size: 1.8rem; margin-bottom: var(--space-5); }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--space-4);
+  }
+
+  .project {
+    grid-column: span 6;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .project.revealed { opacity: 1; transform: translateY(0); }
+
+  @media (min-width: 720px) {
+    .project:nth-child(1) { grid-column: span 4; }
+    .project:nth-child(2) { grid-column: span 2; }
+    .project:nth-child(3) { grid-column: span 6; }
+  }
+
+  .project-image {
+    aspect-ratio: 4 / 3;
+    background: linear-gradient(135deg, #232130, #1a1922);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    overflow: hidden;
+  }
+
+  .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .project-info { padding: var(--space-3); }
+
+  .project-info h3 { font-size: 1.15rem; font-weight: 500; }
+
+  .project-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.35rem;
+  }
+
+  /* ============================================
+     8. CONTACT
+  ============================================ */
+  .contact {
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .contact h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    max-width: 16ch;
+  }
+
+  .contact p { color: var(--text-muted); margin-top: var(--space-2); max-width: 50ch; }
+
+  .contact .cta-row { margin-top: var(--space-4); }
+
+  /* ============================================
+     CONTACT FORM
+  ============================================ */
+  .contact-form {
+    margin-top: var(--space-4);
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .field input, .field textarea {
+    width: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 0.75rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+  }
+
+  .field input:focus, .field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  /* Error state — only shown via JS after validation fails */
+  .field.error input, .field.error textarea { border-color: #d16a5a; }
+  .field .error-msg {
+    display: none;
+    color: #d16a5a;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+  }
+  .field.error .error-msg { display: block; }
+
+  .form-status {
+    font-size: 0.9rem;
+    color: var(--accent);
+    display: none;
+  }
+  .form-status.visible { display: block; }
+
+  .contact-form button[type="submit"] {
+    align-self: flex-start;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
+  /* ============================================
+     9. FOOTER
+  ============================================ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-block: var(--space-4);
+  }
+
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  footer .social-links { display: flex; gap: var(--space-3); }
+  footer .social-links a:hover { color: var(--text); }
+
+  /* ============================================
+     10. RESPONSIVE — mobile adjustments
+  ============================================ */
+  /* Hamburger button — hidden on desktop, shown on mobile */
+  .menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .menu-btn span {
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* When menu is open, morph the three bars into an X */
+  .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  @media (max-width: 720px) {
+    .menu-btn { display: flex; }
+
+    .nav-links {
+      position: fixed;
+      inset: 61px 0 0 0; /* top offset = header height */
+      flex-direction: column;
+      background: var(--bg);
+      padding: var(--space-4);
+      gap: var(--space-3);
+      font-size: 1.1rem;
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+    }
+
+    .nav-links.open { transform: translateX(0); }
+
+    .about { grid-template-columns: 1fr; }
+    footer .container { flex-direction: column; gap: var(--space-2); text-align: center; }
+  }
+
+</style>
+</head>
+<body>
+
+  <header>
+    <nav class="container">
+      <div class="logo">Moses Mwangi</div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>Design that says <span class="accent-word">exactly</span> what it means.</h1>
+      <p>I'm Moses Mwangi, a UI/UX and graphic designer — logos, posters, flyers, and web design for businesses that want to stand out.</p>
+      <div class="cta-row">
+        <a href="#work" class="btn">View my work</a>
+        <a href="#contact" class="btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about container" id="about">
+    <h2>About</h2>
+    <div class="about-body">
+      <p>I'm Moses, based in Gatanga along the Thika–Gatanga road. I design logos, posters, flyers, and social media posts for small businesses — and I build websites too.</p>
+      <p>My approach starts with <strong>understanding the business</strong>, not just making something look good — every design needs to actually help sell, promote, or communicate. From there: structure, type, color, motion, in that order.</p>
+      <p>Currently open to freelance design and web work.</p>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio" id="work">
+    <div class="container">
+      <h2>Selected work</h2>
+      <div class="project-grid">
+        <div class="project">
+          <div class="project-image"><img src="images/project-thika-trees.jpg" alt="Thika Trees Plantation promotional poster featuring a man holding a young tree"></div>
+          <div class="project-info">
+            <h3>Thika Trees Plantation</h3>
+            <p>Promotional poster for a tree seedling business — built around a real photo, a clear price point, and a strong call to action.</p>
+          </div>
+        </div>
+        <div class="project">
+          <div class="project-image"><img src="images/project-urban-style.jpg" alt="Urban Style Clothing promotional poster for a streetwear shop"></div>
+          <div class="project-info">
+            <h3>Urban Style Clothing</h3>
+            <p>Social media ad for a clothing shop in Thika Town — product shots, a discount offer, and a clear shop-now call to action.</p>
+          </div>
+        </div>
+        <div class="project">
+          <div class="project-image"><img src="images/project-urban-fit.jpg" alt="Urban Fit streetwear brand promotional poster"></div>
+          <div class="project-info">
+            <h3>Urban Fit</h3>
+            <p>Brand poster for a men's streetwear label — bold type and a confident product shot to launch a new collection.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact container" id="contact">
+    <h2>Let's work together.</h2>
+    <p>The best way to reach me is by email — I read everything and reply within a day or two.</p>
+
+    <form class="contact-form" id="contact-form" novalidate>
+      <div class="field" id="name-field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name">
+        <div class="error-msg">Please enter your name.</div>
+      </div>
+      <div class="field" id="email-field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email">
+        <div class="error-msg">Please enter a valid email address.</div>
+      </div>
+      <div class="field" id="message-field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4"></textarea>
+        <div class="error-msg">Please enter a message.</div>
+      </div>
+      <button type="submit" class="btn">Send message</button>
+      <div class="form-status" id="form-status">Thanks — your message looks good. (This demo form doesn't actually send yet — see note below.)</div>
+    </form>
+
+    <p style="margin-top: var(--space-4); font-size: 0.9rem;">
+      Or reach me directly — <a href="https://wa.me/254795079459" class="btn-ghost" target="_blank" rel="noopener">WhatsApp: 0795 079 459</a>
+    </p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div>© 2026 Moses Mwangi</div>
+      <div class="social-links">
+        <a href="#">LinkedIn</a>
+        <a href="#">Instagram</a>
+        <a href="#">Dribbble</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const navLinks = document.getElementById('nav-links');
+
+    menuBtn.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // Close menu after tapping a link (better mobile UX)
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Reveal project cards as they scroll into view.
+    // IntersectionObserver watches elements without a scroll-event
+    // listener firing constantly — much better for performance.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      document.querySelectorAll('.project').forEach(el => el.classList.add('revealed'));
+    } else {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target); // only animate once
+          }
+        });
+      }, { threshold: 0.15 });
+
+      document.querySelectorAll('.project').forEach(el => observer.observe(el));
+    }
+    // ============================================
+    // CONTACT FORM VALIDATION
+    // This is "real" JS logic: check values, decide
+    // what to do, give the user feedback.
+    // ============================================
+    const form = document.getElementById('contact-form');
+    const status = document.getElementById('form-status');
+
+    function setError(fieldId, hasError) {
+      document.getElementById(fieldId).classList.toggle('error', hasError);
+    }
+
+    function isValidEmail(value) {
+      // A simple, readable check — not a bulletproof regex,
+      // but good enough for catching obvious mistakes.
+      return value.includes('@') && value.includes('.');
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault(); // stop the page from reloading — we handle it ourselves
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      // Each check is independent, so we can flag multiple
+      // errors at once instead of stopping at the first one.
+      const nameValid = name.length > 0;
+      const emailValid = isValidEmail(email);
+      const messageValid = message.length > 0;
+
+      setError('name-field', !nameValid);
+      setError('email-field', !emailValid);
+      setError('message-field', !messageValid);
+
+      const allValid = nameValid && emailValid && messageValid;
+
+      if (allValid) {
+        status.classList.add('visible');
+        // In a real site, this is where you'd send the data
+        // to a form service (Formspree, Netlify Forms, etc.)
+        // since plain HTML/CSS/JS can't send emails on its own.
+      } else {
+        status.classList.remove('visible');
+      }
+    });
+  </script>
+</body>
+</html>
